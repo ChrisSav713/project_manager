@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useSignup } from '../../hooks/useSignup'
 
+// styles
 import './Signup.css'
 
-const Signup = () => {
+export default function Signup() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [displayName, setDisplayName] = useState('')
@@ -30,19 +31,20 @@ const Signup = () => {
       return
     }
     if (selected.size > 100000) {
-      setThumbnailError('Selected file must be less than 100kb')
+      setThumbnailError('Image file size must be less than 100kb')
       return
     }
+
     setThumbnailError(null)
     setThumbnail(selected)
     console.log('thumbnail updated')
   }
 
   return (
-    <form className='auth-form'>
-      <h2>Signup</h2>
+    <form onSubmit={handleSubmit} className='auth-form'>
+      <h2>sign up</h2>
       <label>
-        <span>Email:</span>
+        <span>email:</span>
         <input
           required
           type='email'
@@ -51,7 +53,7 @@ const Signup = () => {
         />
       </label>
       <label>
-        <span>Password:</span>
+        <span>password:</span>
         <input
           required
           type='password'
@@ -60,7 +62,7 @@ const Signup = () => {
         />
       </label>
       <label>
-        <span>Display Name:</span>
+        <span>display name:</span>
         <input
           required
           type='text'
@@ -69,23 +71,17 @@ const Signup = () => {
         />
       </label>
       <label>
-        <span>Thumbnail:</span>
+        <span>Profile thumbnail:</span>
         <input required type='file' onChange={handleFileChange} />
         {thumbnailError && <div className='error'>{thumbnailError}</div>}
       </label>
-      {!isPending && (
-        <button onClick={(e) => handleSubmit(e)} className='btn'>
-          Signup
-        </button>
-      )}
+      {!isPending && <button className='btn'>Sign up</button>}
       {isPending && (
-        <button disabled className='btn'>
-          Sign Up
+        <button className='btn' disabled>
+          loading
         </button>
       )}
       {error && <div className='error'>{error}</div>}
     </form>
   )
 }
-
-export default Signup

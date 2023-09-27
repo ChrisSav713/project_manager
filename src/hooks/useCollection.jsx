@@ -1,10 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { projectFirestore } from '../Firebase/firebaseConfig'
+import { useEffect, useState, useRef } from 'react'
+import { projectFirestore } from '../firebase/config'
 
-const useCollection = (collection, _query, _orderBy) => {
+export const useCollection = (collection, _query, _orderBy) => {
   const [documents, setDocuments] = useState(null)
   const [error, setError] = useState(null)
 
+  // if we don't use a ref --> infinite loop in useEffect
+  // _query is an array and is "different" on every function call
   const query = useRef(_query).current
   const orderBy = useRef(_orderBy).current
 
@@ -39,7 +41,5 @@ const useCollection = (collection, _query, _orderBy) => {
     return () => unsubscribe()
   }, [collection, query, orderBy])
 
-  return { documents, error, orderBy }
+  return { documents, error }
 }
-
-export default useCollection
